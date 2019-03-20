@@ -1,0 +1,20 @@
+{
+  "name": "simemu",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "mocha"
+  },
+  "author": "Enrico Pozzobon",
+  "license": "ISC",
+  "dependencies": {
+    "milenage": "^1.1.1",
+    "minimist": "^1.2.0",
+    "pcsclite": "^0.6.0",
+    "serialport": "^6.2.0",
+    "sprintf": "^0.1.5",
+    "termios": "^0.1.8"
+  }
+}
