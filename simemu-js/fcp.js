@@ -1,5 +1,5 @@
 const tlv = require("./tlv");
-const sprintf = require("sprintf");
+const sprintf = require("sprintf-js").sprintf;
 const assert = require("assert").strict;
 
 

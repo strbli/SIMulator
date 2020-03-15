@@ -1,4 +1,4 @@
-let sprintf = require('sprintf');
+let sprintf = require('sprintf-js').sprintf;
 
 
 

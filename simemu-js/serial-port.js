@@ -1,5 +1,5 @@
 const fs = require('fs');
-const termios = require('termios');
+const termios = require('node-termios');
 const EventEmitter = require('events');
 
 class SerialPort extends EventEmitter {
@@ -23,19 +23,20 @@ class SerialPort extends EventEmitter {
                 return;
             }
 
-            let tty_state = termios.getattr(fd);
-            tty_state.lflag.ICANON = false;  // don't canonicalize input lines
-            tty_state.lflag.IEXTEN = false;  // disable DISCARD and LNEXT
-            tty_state.lflag.ISIG = false;  // disable signals INTR, QUIT, [D]SUSP
-            tty_state.lflag.ECHO = false;  // disable echoing
-            tty_state.iflag.ICRNL = false;  // don't map CR to NL (ala CRMOD)
-            tty_state.iflag.INPCK = false;  // disable checking of parity errors
-            tty_state.iflag.ISTRIP = false;  // don't strip 8th bit off chars
-            tty_state.iflag.IXON = false;  // disable output flow control
-            tty_state.iflag.BRKINT = false;  // don't map BREAK to SIGINT
-            tty_state.oflag.OPOST = false;  // disable output post-processing
-            tty_state.cflag.CS8 = true;  // 8 bits per transfer
-            termios.setattr(fd, tty_state);
+            let tty_state = termios.Termios(fd);
+            const sym = termios.native.ALL_SYMBOLS;
+            tty_state.c_lflag &= ~sym.ICANON;  // don't canonicalize input lines
+            tty_state.c_lflag &= ~sym.IEXTEN;  // disable DISCARD and LNEXT
+            tty_state.c_lflag &= ~sym.ISIG;    // disable signals INTR, QUIT, [D]SUSP
+            tty_state.c_lflag &= ~sym.ECHO;    // disable echoing
+            tty_state.c_iflag &= ~sym.ICRNL;   // don't map CR to NL (ala CRMOD)
+            tty_state.c_iflag &= ~sym.INPCK;   // disable checking of parity errors
+            tty_state.c_iflag &= ~sym.ISTRIP;  // don't strip 8th bit off chars
+            tty_state.c_iflag &= ~sym.IXON;    // disable output flow control
+            tty_state.c_iflag &= ~sym.BRKINT;  // don't map BREAK to SIGINT
+            tty_state.c_oflag &= ~sym.OPOST;   // disable output post-processing
+            tty_state.c_cflag |= sym.CS8;      // 8 bits per transfer
+            tty_state.writeTo(fd);
 
             this.fd = fd;
             const stream = fs.createReadStream(null, {fd});

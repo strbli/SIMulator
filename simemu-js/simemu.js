@@ -1,5 +1,5 @@
 const EventEmitter = require('events');
-const sprintf = require('sprintf');
+const sprintf = require('sprintf-js').sprintf;
 
 const STATE_WAIT_HDR = 1;
 const STATE_WAIT_DATA = 2;

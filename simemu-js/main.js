@@ -1,4 +1,4 @@
-const sprintf = require('sprintf');
+const sprintf = require('sprintf-js').sprintf;
 const SimEmu = require('./simemu');
 const process = require('process');
 const fs = require('fs');

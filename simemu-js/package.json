@@ -1,7 +1,8 @@
 {
   "name": "simemu",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
+  "repository": "https://github.com/strbli/SIMulator",
   "main": "index.js",
   "scripts": {
     "start": "node main.js",
@@ -11,10 +12,11 @@
   "license": "ISC",
   "dependencies": {
     "milenage": "^1.1.1",
-    "minimist": "^1.2.0",
-    "pcsclite": "^0.6.0",
-    "serialport": "^6.2.0",
-    "sprintf": "^0.1.5",
-    "termios": "^0.1.8"
+    "minimist": "^1.2.5",
+    "mocha": "^7.1.0",
+    "node-termios": "0.0.13",
+    "pcsclite": "^1.0.0",
+    "serialport": "^8.0.7",
+    "sprintf-js": "^1.1.2"
   }
 }
