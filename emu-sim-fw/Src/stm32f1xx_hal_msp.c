@@ -114,9 +114,9 @@ void HAL_MspInit(void)
   /* PendSV_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(PendSV_IRQn, 5, 0);
 
-  /**NOJTAG: JTAG-DP Disabled and SW-DP Enabled 
+  /** ENABLE: Full SWJ (JTAG-DP + SW-DP): Reset State 
   */
-  __HAL_AFIO_REMAP_SWJ_NOJTAG();
+  __HAL_AFIO_REMAP_SWJ_ENABLE();
 
   /* USER CODE BEGIN MspInit 1 */
 
@@ -131,7 +131,6 @@ void HAL_MspInit(void)
 */
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
 {
-
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   if(htim_base->Instance==TIM1)
   {
@@ -163,10 +162,8 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
 * @param htim_base: TIM_Base handle pointer
 * @retval None
 */
-
 void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* htim_base)
 {
-
   if(htim_base->Instance==TIM1)
   {
   /* USER CODE BEGIN TIM1_MspDeInit 0 */
@@ -195,7 +192,6 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* htim_base)
 */
 void HAL_SMARTCARD_MspInit(SMARTCARD_HandleTypeDef* hsmartcard)
 {
-
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   if(hsmartcard->Instance==USART1)
   {
@@ -262,7 +258,6 @@ void HAL_SMARTCARD_MspInit(SMARTCARD_HandleTypeDef* hsmartcard)
 */
 void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 {
-
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   if(huart->Instance==USART3)
   {
@@ -303,10 +298,8 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 * @param hsmartcard: SMARTCARD handle pointer
 * @retval None
 */
-
 void HAL_SMARTCARD_MspDeInit(SMARTCARD_HandleTypeDef* hsmartcard)
 {
-
   if(hsmartcard->Instance==USART1)
   {
   /* USER CODE BEGIN USART1_MspDeInit 0 */
@@ -355,10 +348,8 @@ void HAL_SMARTCARD_MspDeInit(SMARTCARD_HandleTypeDef* hsmartcard)
 * @param huart: UART handle pointer
 * @retval None
 */
-
 void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 {
-
   if(huart->Instance==USART3)
   {
   /* USER CODE BEGIN USART3_MspDeInit 0 */
