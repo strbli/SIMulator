@@ -1,4 +1,4 @@
-const sprintf = require('sprintf');
+const sprintf = require('sprintf-js').sprintf;
 const Milenage = require('milenage');
 const tlv = require("./tlv");
 const fcpParser = require("./fcp");
