@@ -33,10 +33,10 @@ stm32flash -w build/simemu.bin /dev/ttyUSB0
 
 # Program installation
 ```bash
-sudo pacman -S nodejs npm
+sudo pacman -S nodejs npm pcsclite
 cd SIMulator/simemu-js
 npm install
-npm start /dev/ttyACM0 sims/passthrough/simemu.js
+node main.js -f /dev/ttyACM0 passthrough.js
 ```
 
 ## Customzing emulated SIM cards
