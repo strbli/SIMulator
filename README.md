@@ -12,7 +12,7 @@ TODO: actual readme will be available soon
 - Wires
 
 ## schematic
-![Schematic](https://epozzobon.it/images/SIMulator-schematic.png)
+![Schematic](https://epozzobon.it/images/SIMulator-schematic.png?v=3)
 
 ## USB CDC serial driver
 - linux: set up permissions in udev & join the plugdev group
