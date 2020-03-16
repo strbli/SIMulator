@@ -1,4 +1,5 @@
 #include "utils.h"
+#include <stdarg.h>
 
 
 bool serial_recv_async_(SMARTCARD_HandleTypeDef *iface, void *ptr, uint16_t len) {
@@ -133,6 +134,7 @@ int ringbuf_init(struct ringbuf *rb, uint8_t *buf, uint32_t size) {
   rb->size = size;
   rb->wpos = 0;
   rb->rpos = 0;
+  return 0;
 }
 
 
@@ -192,3 +194,21 @@ int ringbuf_write(struct ringbuf *rb, uint8_t *src, uint32_t len) {
   return len;
 }
 
+int usb_printf(const char *format, ...) {
+  static char buff[83];
+  buff[0] = 'I';
+  buff[1] = ' ';
+  buff[82] = 0;
+
+  va_list args;
+  va_start(args, format);
+  int res = vsnprintf(buff+2, 80, format, args);
+  va_end(args);
+
+  ssize_t r = CDC_WriteString(buff);
+  if (r < 0) {
+    return (int) r;
+  } else {
+    return res;
+  }
+}

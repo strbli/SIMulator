@@ -56,8 +56,12 @@
 /* USER CODE BEGIN Includes */
 #include "simemu.h"
 #include "simrdr.h"
+#include "utils.h"
+
+#ifdef JLINK_DEBUG
 #include "RTT/SEGGER_RTT.h"
 #include "RTT/SEGGER_RTT_Conf.h"
+#endif
 
 /* USER CODE END Includes */
 
@@ -129,7 +133,9 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
 
+#ifdef JLINK_DEBUG
   SEGGER_RTT_Init();
+#endif
 
   simemu_init(&hsc1);
   simrdr_init(&hsc2);

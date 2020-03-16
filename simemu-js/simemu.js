@@ -167,8 +167,7 @@ class Reader extends EventEmitter {
             } break;
 
             case 'n': {
-                let b = Buffer.from(arg, 'hex');
-                this.emit('nul', b);
+                this.emit('nul');
             } break;
 
             case 'r': {

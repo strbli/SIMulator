@@ -5,10 +5,21 @@
 #include "stdint.h"
 #include "stdbool.h"
 #include "usbd_cdc_if.h"
+
+#define JLINK_DEBUG
+//#define USB_DEBUG
+
+#ifdef JLINK_DEBUG
 #include "../Src/RTT/SEGGER_RTT.h"
 #include "../Src/RTT/SEGGER_RTT_Conf.h"
-
 #define dbg_printf(...) SEGGER_RTT_printf(0, __VA_ARGS__)
+#else
+#ifdef USB_DEBUG
+#define dbg_printf(...) usb_printf(__VA_ARGS__)
+#else
+#define dbg_printf(...) (void)(NULL)
+#endif
+#endif
 
 struct ringbuf {
     uint32_t size;
@@ -30,6 +41,7 @@ int ringbuf_at(struct ringbuf *rb, uint32_t pos);
 int ringbuf_peek(struct ringbuf *rb, uint8_t *dst, uint32_t off, uint32_t len);
 int ringbuf_read(struct ringbuf *rb, uint8_t *dst, uint32_t len);
 int ringbuf_write(struct ringbuf *rb, uint8_t *src, uint32_t len);
+int usb_printf(const char *format, ...);
 
 
 #endif

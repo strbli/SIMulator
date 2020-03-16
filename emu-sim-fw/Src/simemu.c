@@ -245,6 +245,7 @@ void simemu_run() {
 
   switch (state) {
     case STATE_OFF:
+      /* Wait until the modem resets the card. */
       READ_REG(iface->Instance->DR);
       if (!sim_was_reset()) {
         CDC_WriteString("I BOOT\n");
@@ -254,6 +255,7 @@ void simemu_run() {
       break;
 
     case STATE_WAIT_CLK:
+      /* This state waits until the modem starts sending a clock. */
       if (clock > 100000) {
         dbg_printf("Clock received: %d\n", clock);
         go_to_state(STATE_INIT_ATR);
@@ -261,15 +263,18 @@ void simemu_run() {
       break;
 
     case STATE_INIT_ATR:
+      /* In this state we just wait 1 tick and then send the ATR. */
       if ((HAL_GetTick() - last_state_tick) > 1) {
         dbg_printf("Sending ATR\n");
         begin_atr();
         serial_send_async(atr_buf, atr_len);
+        pts_len = 0;
         go_to_state(STATE_INIT_PTS);
       }
       break;
 
     case STATE_INIT_PTS:
+      /* In this state we wait for the PTS, parse it, and echo it. */
       transfered = ringbuf_count(&rb);
       if (serial_idle && transfered > 0) {
         space = sizeof(pts_buf) - pts_len;
@@ -287,6 +292,7 @@ void simemu_run() {
       break;
 
     case STATE_INIT_PTS_ECHO:
+      /* Wait until the PTS echo is completely sent */
       if (serial_idle) {
         begin_normal_operation();
         go_to_state(STATE_RECV_HDR);
@@ -294,6 +300,7 @@ void simemu_run() {
       break;
 
     case STATE_RECV_HDR:
+      /* Receive a 5 byte APDU header */
       transfered = ringbuf_count(&rb);
       if (transfered == 5) {
         ringbuf_read(&rb, &hdr, 5);
@@ -310,6 +317,7 @@ void simemu_run() {
       break;
     
     case STATE_RECV_DATA:
+      /* Receive the data of a command APDU */
       transfered = ringbuf_count(&rb);
       if (sim_resp_len > 0) {
         if (transfered > 0) {
@@ -330,6 +338,7 @@ void simemu_run() {
       break;
 
     case STATE_WAIT_ACK:
+      /* The modem is waiting for us to acknowledge or send a response or a state. */
       if (sim_ack_present) {
         dbg_printf("Returning ack %02x\n", sim_ack[0]);
         go_to_state(STATE_SENDING_ACK);
@@ -359,24 +368,28 @@ void simemu_run() {
       break;
 
     case STATE_SENDING_ACK:
+      /* Wait until ACK is out, then switch to receiving data. */
       if (serial_idle) {
         go_to_state(STATE_RECV_DATA);
       }
       break;
 
     case STATE_SENDING_RESP:
+      /* Wait until response is out, then switch to receiving ACK. */
       if (serial_idle) {
         go_to_state(STATE_WAIT_ACK);
       }
       break;
 
     case STATE_SENDING_STATUS:
+      /* Wait until status is out, then switch to waiting for a new APDU header. */
       if (serial_idle) {
         go_to_state(STATE_RECV_HDR);
       }
       break;
 
     case STATE_SENDING_NUL:
+      /* Wait until NUL is out, then go back to receiving ACK. */
       if (serial_idle) {
         go_to_state(STATE_WAIT_ACK);
       }
